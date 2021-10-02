@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import { format } from 'date-fns'
+import moment from "moment";
 
 export default {
   props: ["task"],
   filters: {
     niceDate(value) {
-      return format(new Date(value), 'MMM d yyyy')
-    }
+      return moment(value).format("MMM D");
+    },
   },
   components: {
     "task-menu": require("@/components/Todo/TaskMenu.vue").default,
