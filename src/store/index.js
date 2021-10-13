@@ -5,24 +5,25 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    search: null,
     tasks: [
       {
         id: 1,
         title: "Wake Up",
         done: false,
-        dueDate: '2021-10-29'
+        dueDate: "2021-10-29",
       },
       {
         id: 2,
         title: "Get Bananas",
         done: false,
-        dueDate: '2021-10-25'
+        dueDate: "2021-10-25",
       },
       {
         id: 3,
         title: "Eat Bananas",
         done: false,
-        dueDate: null
+        dueDate: null,
       },
     ],
     snackbar: {
@@ -31,18 +32,21 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setSearch(state, value) {
+      console.log("value: ", value);
+      state.search = value;
+    },
     addTask(state, newTaskTitle) {
       if (!newTaskTitle.length) return;
       let newTask = {
         id: Date.now(),
         title: newTaskTitle,
         done: false,
-        dueDate: null
+        dueDate: null,
       };
       state.tasks.push(newTask);
     },
     doneTask(state, id) {
-      console.log("id: ", id);
       let task = state.tasks.filter((task) => task.id === id)[0];
       task.done = !task.done;
     },
@@ -89,10 +93,21 @@ export default new Vuex.Store({
       commit("editTask", payload);
       commit("showSnackbar", "Task Updated");
     },
-    setDate({ commit} , payload) {
+    setDate({ commit }, payload) {
       commit("setDate", payload);
       commit("showSnackbar", "Due Date Set");
-    }
+    },
+  },
+  getters: {
+    tasksFiltered(state) {
+      if (!state.search) {
+        return state.tasks;
+      } else {
+        return state.tasks.filter((task) =>
+          task.title.toLowerCase().includes(state.search.toLowerCase())
+        );
+      }
+    },
   },
   modules: {},
 });

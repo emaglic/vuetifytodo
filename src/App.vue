@@ -28,27 +28,37 @@
     </v-navigation-drawer>
 
     <!-- APP BAR -->
-    <v-app-bar app absolute color="primary" dark shrink-on-scroll prominent src="mountains.jpg">
+    <v-app-bar
+      app
+      absolute
+      color="primary"
+      dark
+      shrink-on-scroll
+      prominent
+      height="170"
+      src="mountains.jpg"
+    >
       <template v-slot:img="{ props }">
-        <v-img v-bind="props" gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"></v-img>
+        <v-img
+          v-bind="props"
+          gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
+        ></v-img>
       </template>
 
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Vuetify Todo</v-toolbar-title>
+      <v-container class="pa-0">
+        <v-row>
+          <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-spacer></v-spacer>
+          <search />
+        </v-row>
 
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+        <v-row>
+          <v-toolbar-title class="ml-4">Vuetify Todo</v-toolbar-title>
+        </v-row>
+        <v-row>
+          <p class="ml-4">{{ new Date() }}</p>
+        </v-row>
+      </v-container>
     </v-app-bar>
     <!-- END APP BAR -->
 
@@ -71,6 +81,7 @@ export default {
   }),
   components: {
     snackbar: require("@/components/Shared/Snackbar.vue").default,
+    search: require("@/components/Tools/Search.vue").default,
   },
 };
 </script>
