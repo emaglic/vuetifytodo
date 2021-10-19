@@ -9,10 +9,12 @@ const routes = [
     path: "/",
     name: "Todo",
     component: Todo,
+    meta: { title: "Homepage" },
   },
   {
     path: "/about",
     name: "About",
+    meta: { title: "About Page" },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -22,6 +24,12 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  console.log("to: ", to);
+  document.title = process.env.VUE_APP_TITLE + " - " + to.meta.title;
+  next();
 });
 
 export default router;

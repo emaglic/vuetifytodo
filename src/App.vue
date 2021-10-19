@@ -1,16 +1,13 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="text-h6">
-            Vuetify Todo
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            Best Todo Ever
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+    <v-navigation-drawer v-model="drawer" :mobile-breakpoint="768" app>
+      <v-img lazy-src="https://picsum.photos/id/11/10/6" class="pa-4 pt-7" height="170" src="https://picsum.photos/id/11/500/300" gradient="to top right, rgba(19,84,122,0.5), rgba(128, 208, 199, 0.8)">
+        <v-avatar size="70" class="mb-2">
+          <img src="https://media-exp1.licdn.com/dms/image/C5603AQHP1FCZMO7Drg/profile-displayphoto-shrink_200_200/0/1631562144191?e=1639612800&v=beta&t=fRqfeg-ga-n7EBhj8Iruy73XW8iXbgpBMN8g6YT9pEc" alt="Eben" />
+        </v-avatar>
+        <div class="white--text font-weight-bold text-subtitle-1">Eben Maglic</div>
+        <div class="white--text text-subtitle-2">Eben Maglic</div>
+      </v-img>
 
       <v-divider></v-divider>
 
@@ -28,24 +25,12 @@
     </v-navigation-drawer>
 
     <!-- APP BAR -->
-    <v-app-bar
-      app
-      absolute
-      color="primary"
-      dark
-      shrink-on-scroll
-      prominent
-      height="170"
-      src="mountains.jpg"
-    >
+    <v-app-bar app absolute color="primary" dark shrink-on-scroll prominent height="170" src="mountains.jpg">
       <template v-slot:img="{ props }">
-        <v-img
-          v-bind="props"
-          gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
-        ></v-img>
+        <v-img v-bind="props" gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"></v-img>
       </template>
 
-      <v-container class="pa-0">
+      <v-container class="pa-0 header-container">
         <v-row>
           <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
           <v-spacer></v-spacer>
@@ -53,10 +38,10 @@
         </v-row>
 
         <v-row>
-          <v-toolbar-title class="ml-4">Vuetify Todo</v-toolbar-title>
+          <v-toolbar-title class="ml-4">{{ appTitle }}</v-toolbar-title>
         </v-row>
         <v-row>
-          <p class="ml-4">{{ new Date() }}</p>
+          <live-date-time />
         </v-row>
       </v-container>
     </v-app-bar>
@@ -82,6 +67,18 @@ export default {
   components: {
     snackbar: require("@/components/Shared/Snackbar.vue").default,
     search: require("@/components/Tools/Search.vue").default,
+    "live-date-time": require("@/components/Tools/LiveDateTime.vue").default,
+  },
+  computed: {
+    appTitle() {
+      return process.env.VUE_APP_TITLE;
+    },
   },
 };
 </script>
+
+<style lang="scss">
+.header-container {
+  max-width: none !important;
+}
+</style>
