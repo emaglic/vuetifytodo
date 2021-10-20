@@ -29,7 +29,7 @@ export default {
     dialogs: {
       delete: false,
       edit: false,
-      dueDate: false
+      dueDate: false,
     },
     items: [
       {
@@ -52,6 +52,13 @@ export default {
         icon: "mdi-delete",
         click() {
           this.dialogs.delete = true;
+        },
+      },
+      {
+        title: "Sort",
+        icon: "mdi-drag-horizontal-variant",
+        click() {
+          this.$store.commit("toggleSorting");
         },
       },
     ],

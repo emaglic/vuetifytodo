@@ -1,8 +1,8 @@
 <template>
   <div :key="task.id">
-    <v-list-item :class="{ 'blue lighten-5': task.done }">
+    <v-list-item :class="{ 'blue lighten-5': task.done }" @click="$store.dispatch('doneTask', task.id)" :ripple="false" class="">
       <template v-slot:default>
-        <v-list-item-action @click="$store.dispatch('doneTask', task.id)">
+        <v-list-item-action>
           <v-checkbox :input-value="task.done"></v-checkbox>
         </v-list-item-action>
 
@@ -19,6 +19,12 @@
         </v-list-item-action>
         <v-list-item-action>
           <task-menu :task="task" />
+        </v-list-item-action>
+
+        <v-list-item-action v-if="$store.state.sorting">
+          <v-btn primary icon class="handle">
+            <v-icon>mdi-drag-horizontal-variant</v-icon>
+          </v-btn>
         </v-list-item-action>
       </template>
     </v-list-item>
@@ -43,4 +49,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.sortable-ghost {
+  opacity: 0.5;
+}
+.sortable-drag {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+</style>

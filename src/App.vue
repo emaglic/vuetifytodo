@@ -38,7 +38,7 @@
         </v-row>
 
         <v-row>
-          <v-toolbar-title class="ml-4">{{ appTitle }}</v-toolbar-title>
+          <v-toolbar-title class="ml-4">{{ $store.state.appTitle }}</v-toolbar-title>
         </v-row>
         <v-row>
           <live-date-time />
@@ -64,15 +64,13 @@ export default {
       { title: "About", icon: "mdi-help-box", to: "/about" },
     ],
   }),
+  mounted() {
+    this.$store.dispatch("getTasks");
+  },
   components: {
     snackbar: require("@/components/Shared/Snackbar.vue").default,
     search: require("@/components/Tools/Search.vue").default,
     "live-date-time": require("@/components/Tools/LiveDateTime.vue").default,
-  },
-  computed: {
-    appTitle() {
-      return process.env.VUE_APP_TITLE;
-    },
   },
 };
 </script>

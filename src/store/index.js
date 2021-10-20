@@ -1,13 +1,17 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import Localbase from "localbase";
+
+let db = new Localbase("db");
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    appTitle: process.env.VUE_APP_TITLE,
     search: null,
     tasks: [
-      {
+      /* {
         id: 1,
         title: "Wake Up",
         done: false,
@@ -24,26 +28,20 @@ export default new Vuex.Store({
         title: "Eat Bananas",
         done: false,
         dueDate: null,
-      },
+      }, */
     ],
     snackbar: {
       show: false,
       message: "",
     },
+    sorting: false,
   },
   mutations: {
     setSearch(state, value) {
       console.log("value: ", value);
       state.search = value;
     },
-    addTask(state, newTaskTitle) {
-      if (!newTaskTitle.length) return;
-      let newTask = {
-        id: Date.now(),
-        title: newTaskTitle,
-        done: false,
-        dueDate: null,
-      };
+    addTask(state, newTask) {
       state.tasks.push(newTask);
     },
     doneTask(state, id) {
@@ -75,27 +73,80 @@ export default new Vuex.Store({
       let task = state.tasks.filter((task) => task.id === id)[0];
       task.dueDate = dueDate;
     },
+    setTasks(state, tasks) {
+      state.tasks = tasks;
+    },
+    toggleSorting(state) {
+      state.sorting = !state.sorting;
+    },
   },
   actions: {
-    addTask({ commit }, newTaskTitle) {
-      commit("addTask", newTaskTitle);
-      commit("showSnackbar", "Task Added");
+    getTasks({ commit }) {
+      db.collection("tasks")
+        .get()
+        .then((tasks) => {
+          commit("setTasks", tasks);
+        });
     },
-    doneTask({ commit }, id) {
-      commit("doneTask", id);
-      commit("showSnackbar", "Task Done");
+    addTask({ commit }, newTaskTitle) {
+      if (!newTaskTitle.length) return;
+      let newTask = {
+        id: Date.now(),
+        title: newTaskTitle,
+        done: false,
+        dueDate: null,
+      };
+      db.collection("tasks")
+        .add(newTask)
+        .then(() => {
+          commit("addTask", newTask);
+          commit("showSnackbar", "Task Added");
+        });
+    },
+    doneTask({ state, commit }, id) {
+      let task = state.tasks.filter((task) => task.id === id)[0];
+      db.collection("tasks")
+        .doc({ id })
+        .update({
+          done: !task.done,
+        })
+        .then(() => {
+          commit("doneTask", id);
+          commit("showSnackbar", "Task Done");
+        });
     },
     deleteTask({ commit }, id) {
-      commit("deleteTask", id);
-      commit("showSnackbar", "Task Deleted");
+      db.collection("tasks")
+        .doc({ id })
+        .delete()
+        .then(() => {
+          commit("deleteTask", id);
+          commit("showSnackbar", "Task Deleted");
+        });
     },
-    editTask({ commit }, payload) {
-      commit("editTask", payload);
-      commit("showSnackbar", "Task Updated");
+    editTask({ state, commit }, { id, title }) {
+      let task = state.tasks.filter((task) => task.id === id)[0];
+      db.collection("tasks")
+        .doc({ id })
+        .update({
+          title,
+        })
+        .then(() => {
+          commit("editTask", { id, title });
+          commit("showSnackbar", "Task Updated");
+        });
     },
-    setDate({ commit }, payload) {
-      commit("setDate", payload);
-      commit("showSnackbar", "Due Date Set");
+    setDate({ state, commit }, { id, dueDate }) {
+      let task = state.tasks.filter((task) => task.id === id)[0];
+      db.collection("tasks")
+        .doc({ id })
+        .update({
+          dueDate,
+        })
+        .then(() => {
+          commit("setDate", { id, dueDate });
+          commit("showSnackbar", "Due Date Set");
+        });
     },
   },
   getters: {
@@ -103,9 +154,7 @@ export default new Vuex.Store({
       if (!state.search) {
         return state.tasks;
       } else {
-        return state.tasks.filter((task) =>
-          task.title.toLowerCase().includes(state.search.toLowerCase())
-        );
+        return state.tasks.filter((task) => task.title.toLowerCase().includes(state.search.toLowerCase()));
       }
     },
   },
