@@ -2,11 +2,11 @@
   <v-dialog persistent :value="true" max-width="290">
     <v-card>
       <v-card-title class="text-h5">
-        Delete Task?
+        Delete All Tasks?
       </v-card-title>
 
       <v-card-text>
-        Are you sure you wanna delete this gosh darn mother flipping task?
+        Are you sure you wanna delete all tasks?
       </v-card-text>
 
       <v-card-actions>
@@ -16,7 +16,7 @@
           No
         </v-btn>
 
-        <v-btn color="green darken-1" text @click="$store.dispatch('deleteTask', task.id)">
+        <v-btn color="green darken-1" text @click="handleDeleteAll">
           Yes
         </v-btn>
       </v-card-actions>
@@ -26,7 +26,12 @@
 
 <script>
 export default {
-  props: ["task"],
+  methods: {
+    handleDeleteAll() {
+      this.$emit("close");
+      this.$store.dispatch("deleteAllTasks");
+    },
+  },
 };
 </script>
 

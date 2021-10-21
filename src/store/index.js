@@ -80,6 +80,9 @@ export default new Vuex.Store({
     toggleSorting(state) {
       state.sorting = !state.sorting;
     },
+    deleteAllTasks(state) {
+      state.tasks = [];
+    },
   },
   actions: {
     getTasks({ commit }) {
@@ -152,6 +155,14 @@ export default new Vuex.Store({
     setTasks({ state, commit }, tasks) {
       db.collection("tasks").set(tasks);
       commit("setTasks", tasks);
+    },
+    deleteAllTasks({ state, commit }) {
+      db.collection("tasks")
+        .delete()
+        .then(() => {
+          commit("deleteAllTasks");
+          commit("showSnackbar", "All Tasks Deleted");
+        });
     },
   },
   getters: {

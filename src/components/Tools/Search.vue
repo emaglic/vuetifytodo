@@ -4,6 +4,7 @@
     class="mt-1 expanding-search"
     :class="{ closed: searchClosed && !search }"
     placeholder="Search"
+    :disabled="$store.state.sorting"
     prepend-inner-icon="mdi-magnify"
     @focus="searchClosed = false"
     @input="$store.commit('setSearch', $event)"
@@ -39,6 +40,10 @@ export default {
     .v-input__slot {
       background: transparent !important;
     }
+  }
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
   }
 }
 </style>
