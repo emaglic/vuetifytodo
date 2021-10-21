@@ -1,17 +1,8 @@
 <template>
-  <v-text-field
-    outlined
-    label="Add Task"
-    class="pa-3"
-    hide-details
-    clearable
-    v-model="newTaskTitle"
-    @keyup.enter="addTask"
-  >
-  <template v-slot:append>
-    <v-icon @click="addTask" color="primary" :disabled="newTaskTitleInvalid">mdi-plus</v-icon>
-  </template>
-  
+  <v-text-field outlined placeholder="Add Task" class="pa-3 field-add-task" hide-details clearable v-model="newTaskTitle" @keyup.enter="addTask">
+    <template v-slot:append>
+      <v-icon @click="addTask" :disabled="newTaskTitleInvalid">mdi-plus</v-icon>
+    </template>
   </v-text-field>
 </template>
 
@@ -24,7 +15,7 @@ export default {
   },
   methods: {
     addTask() {
-      if(!this.newTaskTitleInvalid) {
+      if (!this.newTaskTitleInvalid) {
         this.$store.dispatch("addTask", this.newTaskTitle);
         this.newTaskTitle = "";
       }
@@ -33,9 +24,17 @@ export default {
   computed: {
     newTaskTitleInvalid() {
       return !this.newTaskTitle;
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.field-add-task {
+  &.v-input--is-focused {
+    .v-input__slot {
+      background-color: rgba(90, 100, 148, 0.7);
+    }
+  }
+}
+</style>

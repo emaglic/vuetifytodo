@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import Localbase from "localbase";
 
 let db = new Localbase("db");
+db.config.debug = false;
 
 Vue.use(Vuex);
 
@@ -42,7 +43,7 @@ export default new Vuex.Store({
       state.search = value;
     },
     addTask(state, newTask) {
-      state.tasks.push(newTask);
+      state.tasks.unshift(newTask);
     },
     doneTask(state, id) {
       let task = state.tasks.filter((task) => task.id === id)[0];
@@ -85,7 +86,7 @@ export default new Vuex.Store({
       db.collection("tasks")
         .get()
         .then((tasks) => {
-          commit("setTasks", tasks);
+          commit("setTasks", tasks.reverse());
         });
     },
     addTask({ commit }, newTaskTitle) {
@@ -147,6 +148,10 @@ export default new Vuex.Store({
           commit("setDate", { id, dueDate });
           commit("showSnackbar", "Due Date Set");
         });
+    },
+    setTasks({ state, commit }, tasks) {
+      db.collection("tasks").set(tasks);
+      commit("setTasks", tasks);
     },
   },
   getters: {

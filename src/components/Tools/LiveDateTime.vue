@@ -1,6 +1,6 @@
 <template>
-  <div class="text-subtitle-2">
-    <p class="ml-4">{{ date }}</p>
+  <div class="ml-4 text-subtitle-2">
+    {{ date }}
   </div>
 </template>
 

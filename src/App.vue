@@ -6,7 +6,7 @@
           <img src="https://media-exp1.licdn.com/dms/image/C5603AQHP1FCZMO7Drg/profile-displayphoto-shrink_200_200/0/1631562144191?e=1639612800&v=beta&t=fRqfeg-ga-n7EBhj8Iruy73XW8iXbgpBMN8g6YT9pEc" alt="Eben" />
         </v-avatar>
         <div class="white--text font-weight-bold text-subtitle-1">Eben Maglic</div>
-        <div class="white--text text-subtitle-2">Eben Maglic</div>
+        <div class="white--text text-subtitle-2">eben.maglic@gmail.com</div>
       </v-img>
 
       <v-divider></v-divider>
@@ -25,9 +25,9 @@
     </v-navigation-drawer>
 
     <!-- APP BAR -->
-    <v-app-bar app absolute color="primary" dark shrink-on-scroll prominent height="170" src="mountains.jpg">
+    <v-app-bar app fixed color="primary" dark prominent :height="$route.path === '/' ? 238 : 170" src="mountains.jpg">
       <template v-slot:img="{ props }">
-        <v-img v-bind="props" gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"></v-img>
+        <v-img v-bind="props" gradient="to top right, rgba(100,115,201,.8), rgba(25,32,72,.8)"></v-img>
       </template>
 
       <v-container class="pa-0 header-container">
@@ -42,6 +42,9 @@
         </v-row>
         <v-row>
           <live-date-time />
+        </v-row>
+        <v-row v-if="$route.path === '/'">
+          <field-add-task />
         </v-row>
       </v-container>
     </v-app-bar>
@@ -71,6 +74,7 @@ export default {
     snackbar: require("@/components/Shared/Snackbar.vue").default,
     search: require("@/components/Tools/Search.vue").default,
     "live-date-time": require("@/components/Tools/LiveDateTime.vue").default,
+    "field-add-task": require("@/components/Todo/FieldAddTask.vue").default,
   },
 };
 </script>

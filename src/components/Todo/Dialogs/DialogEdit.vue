@@ -42,6 +42,7 @@ export default {
         };
         this.$store.dispatch("editTask", payload);
         this.$emit("close");
+        this.$vuetify.goTo(0, { duration: 0 });
       }
     },
   },
